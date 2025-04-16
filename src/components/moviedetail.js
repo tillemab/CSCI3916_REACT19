@@ -12,12 +12,12 @@ const MovieDetail = () => {
   const loading = useSelector(state => state.movie.loading); // Assuming you have a loading state in your reducer
   const error = useSelector(state => state.movie.error); // Assuming you have an error state in your reducer
 
-
   useEffect(() => {
     dispatch(fetchMovie(movieId));
   }, [dispatch, movieId]);
 
   const DetailInfo = () => {
+
     if (loading) {
       return <div>Loading....</div>;
     }
@@ -51,10 +51,10 @@ const MovieDetail = () => {
             </h4>
           </ListGroupItem>
         </ListGroup>
-        <Card.Body>
-          {selectedMovie.reviews.map((review, i) => (
+        <Card.Body className="card-body bg-white">
+          {selectedMovie.movieReviews.map((review, i) => (
             <p key={i}>
-              <b>{review.username}</b>&nbsp; {review.review} &nbsp; <BsStarFill />{' '}
+              <b>{review.username}</b>&nbsp; {review.movieReview} &nbsp; <BsStarFill />{' '}
               {review.rating}
             </p>
           ))}
