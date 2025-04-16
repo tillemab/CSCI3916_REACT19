@@ -40,10 +40,10 @@ export function fetchMovie(movieId) {
             },
             mode: 'cors'
         }).then((response) => {
-            if (!response.ok) {
+            if (!response.status) {
                 throw Error(response.statusText);
             }
-            return response.json()
+            return response.json()['movie']
         }).then((res) => {
             dispatch(movieFetched(res));
         }).catch((e) => console.log(e));
