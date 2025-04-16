@@ -12,7 +12,7 @@ function moviesFetched(movies) {
 function movieFetched(movie) {
     return {
         type: actionTypes.FETCH_MOVIE,
-        selectedMovie: movie
+        selectedMovie: movie.movie
     }
 }
 
@@ -43,7 +43,7 @@ export function fetchMovie(movieId) {
             if (!response.status) {
                 throw Error(response.statusText);
             }
-            return response.json()['movie']
+            return response.json()
         }).then((res) => {
             dispatch(movieFetched(res));
         }).catch((e) => console.log(e));
