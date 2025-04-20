@@ -1,12 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { fetchMovie } from '../actions/movieActions';
 import { useDispatch, useSelector } from 'react-redux';
-import { Card, ListGroup, ListGroupItem, Image } from 'react-bootstrap';
+import { Card, ListGroup, ListGroupItem, Image, Button } from 'react-bootstrap';
 import { BsStarFill } from 'react-icons/bs';
 import { useParams } from 'react-router-dom'; // Import useParams
+import Review from "../components/review"
 
 const MovieDetail = () => {
   const dispatch = useDispatch();
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const [refresh, setRefresh] = useState(false);
   const { movieId } = useParams(); // Get movieId from URL parameters
   const selectedMovie = useSelector(state => state.movie.selectedMovie);
   const loading = useSelector(state => state.movie.loading); // Assuming you have a loading state in your reducer
@@ -15,6 +18,12 @@ const MovieDetail = () => {
   useEffect(() => {
     dispatch(fetchMovie(movieId));
   }, [dispatch, movieId]);
+
+  useEffect(() => {
+    dispatch(fetchMovie(movieId));
+    setShowReviewForm(false);
+    setRefresh(false);
+  }, [dispatch, movieId, refresh]);
 
   const DetailInfo = () => {
 
@@ -32,7 +41,6 @@ const MovieDetail = () => {
 
     return (
       <Card className="bg-dark text-dark p-4 rounded">
-        <Card.Header>Movie Detail</Card.Header>
         <Card.Body>
           <Image className="image" src={selectedMovie.imageUrl} thumbnail />
         </Card.Body>
@@ -47,17 +55,21 @@ const MovieDetail = () => {
           </ListGroupItem>
           <ListGroupItem>
             <h4>
-              <BsStarFill /> {selectedMovie.avgRating}
+              <BsStarFill /> {selectedMovie.avgRating ? selectedMovie.avgRating.toFixed(1) : "Not Rated"}
             </h4>
           </ListGroupItem>
         </ListGroup>
         <Card.Body className="card-body bg-white">
           {selectedMovie.movieReviews.map((review, i) => (
             <p key={i}>
-              <b>{review.username}</b>&nbsp; {review.movieReview} &nbsp; <BsStarFill />{' '}
+              <b>{review.username}</b>&nbsp; {review.review} &nbsp; <BsStarFill />{' '}
               {review.rating}
             </p>
           ))}
+        </Card.Body>
+        <Card.Body className="card-body bg-white">
+            {!showReviewForm && <Button onClick={() => setShowReviewForm(true)}> Review Movie </Button>}
+            {showReviewForm && <Review movieId={movieId} setRefresh={setRefresh} />}
         </Card.Body>
       </Card>
     );
