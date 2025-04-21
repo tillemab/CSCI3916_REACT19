@@ -20,6 +20,7 @@ const MovieDetail = () => {
   }, [dispatch, movieId]);
 
   useEffect(() => {
+    if (!refresh) { return; }
     dispatch(fetchMovie(movieId));
     setShowReviewForm(false);
     setRefresh(false);
